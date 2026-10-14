@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia de Marca e Receita</title>
+<style>
+  :root {
+    --bg: #fbf6ea;
+    --surface: #f1e7cf;
+    --ink: #3b2414;
+    --ink-soft: #7a6350;
+    --line: #c9b693;
+    --marca: #4a2e1b;
+    --demanda: #d9588f;
+    --receita: #2f8f87;
+    --on-dark: #fbf6ea;
+    --pill-marca: #e6d6b8;
+    --pill-demanda: #f7d3e3;
+    --pill-receita: #cfe9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1f130b;
+      --surface: #2e1d12;
+      --ink: #f3e9d2;
+      --ink-soft: #b9a68c;
+      --line: #5b4330;
+      --marca: #8a5a37;
+      --demanda: #e46fa0;
+      --receita: #3fb0a6;
+      --on-dark: #1f130b;
+      --pill-marca: #3d2818;
+      --pill-demanda: #4a2536;
+      --pill-receita: #1f3d3a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1f130b; --surface: #2e1d12; --ink: #f3e9d2; --ink-soft: #b9a68c; --line: #5b4330;
+    --marca: #8a5a37; --demanda: #e46fa0; --receita: #3fb0a6; --on-dark: #1f130b;
+    --pill-marca: #3d2818; --pill-demanda: #4a2536; --pill-receita: #1f3d3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+  header { padding: 40px 0 8px; }
+  .eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.1; margin: 6px 0 10px; }
+  h2 { font-size: 24px; margin: 0 0 6px; }
+  h3 { font-size: 18px; margin: 0 0 4px; }
+  p.lead { color: var(--ink-soft); max-width: 62ch; margin: 0; }
+  section { padding: 36px 0 8px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 14px 0 0; font-size: 14px; color: var(--ink-soft); }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  .mapbox { background: var(--surface); border-radius: 18px; padding: 12px; margin-top: 16px; overflow-x: auto; }
+  .mapbox svg { display: block; width: 100%; min-width: 820px; height: auto; }
+  .hint { font-size: 14px; color: var(--ink-soft); margin: 10px 4px 0; }
+
+  /* map svg */
+  .ring { fill: none; stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 7; }
+  .arrow { fill: var(--ink-soft); }
+  .loop { fill: none; stroke: var(--demanda); stroke-width: 2.2; }
+  .loop-label { fill: var(--demanda); font-size: 13px; font-weight: 600; text-anchor: middle; }
+  .center { fill: var(--ink); }
+  .center-t { fill: var(--bg); font-weight: 700; text-anchor: middle; font-size: 17px; }
+  .node-t { fill: var(--on-dark); font-weight: 700; font-size: 24px; text-anchor: middle; dominant-baseline: central; }
+  .node-l { fill: var(--ink); font-weight: 700; font-size: 16px; text-anchor: middle; }
+  .pill-t { fill: var(--ink); font-size: 12.5px; text-anchor: middle; dominant-baseline: central; }
+  .l-marca { fill: var(--marca); } .l-demanda { fill: var(--demanda); } .l-receita { fill: var(--receita); }
+  .p-marca { fill: var(--pill-marca); } .p-demanda { fill: var(--pill-demanda); } .p-receita { fill: var(--pill-receita); }
+  .nodelink { cursor: pointer; }
+  .nodelink:hover circle { stroke: var(--ink); stroke-width: 3; }
+  .nodelink:focus-visible circle { stroke: var(--ink); stroke-width: 4; }
+
+  /* marcos */
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 16px; }
+  .card { background: var(--surface); border-radius: 16px; padding: 18px; border-top: 5px solid var(--marca); scroll-margin-top: 16px; }
+  .card.demanda { border-top-color: var(--demanda); }
+  .card.receita { border-top-color: var(--receita); }
+  .card:target { outline: 3px solid var(--ink); }
+  .badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--marca); color: var(--on-dark); font-weight: 700; font-size: 14px; margin-right: 8px; }
+  .card.demanda .badge { background: var(--demanda); } .card.receita .badge { background: var(--receita); }
+  .q { font-style: italic; color: var(--ink-soft); margin: 6px 0 10px; }
+  dl { margin: 0; font-size: 15px; }
+  dt { font-weight: 700; margin-top: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  dd { margin: 2px 0 0; }
+  .soon { display: inline-block; margin-top: 12px; font-size: 13px; color: var(--ink-soft); border: 1px dashed var(--line); border-radius: 999px; padding: 2px 10px; }
+
+  .twin { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 16px; }
+  .panel { background: var(--surface); border-radius: 16px; padding: 18px; }
+  .panel svg { width: 100%; height: auto; display: block; margin-top: 8px; }
+  .q-axis { stroke: var(--ink); stroke-width: 2; }
+  .q-t { fill: var(--ink); font-size: 13px; font-weight: 600; text-anchor: middle; }
+  .q-s { fill: var(--ink-soft); font-size: 12px; text-anchor: middle; }
+  .chip-d { fill: var(--marca); } .chip-t { fill: var(--on-dark); font-size: 12.5px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+  .chip-you { fill: var(--demanda); }
+  .bt-l { fill: var(--pill-marca); stroke: var(--marca); stroke-width: 2; }
+  .bt-r { fill: var(--pill-receita); stroke: var(--receita); stroke-width: 2; }
+  .bt-t { fill: var(--ink); font-size: 11px; text-anchor: middle; font-weight: 600; }
+
+  /* niveis */
+  .levels { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-top: 16px; counter-reset: lv; }
+  .level { background: var(--surface); border-radius: 16px; padding: 16px; position: relative; }
+  .level::before { counter-increment: lv; content: "Nível " counter(lv); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--demanda); font-weight: 700; }
+  .level p { margin: 4px 0 0; font-size: 15px; color: var(--ink-soft); }
+  footer { padding: 36px 0 60px; color: var(--ink-soft); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Guia para empresas · proposta de estrutura</div>
+  <h1>Do diagnóstico à receita em 6 marcos</h1>
+  <p class="lead">Primeiro o mapa inteiro, de relance. Depois, cada marco se abre em camadas: visão geral, passo a passo, modelos e exemplos.</p>
+</header>
+
+<section id="mapa">
+  <h2>Nível 0 · O mapa da jornada</h2>
+  <p class="lead">Seis marcos em três camadas. A jornada é um ciclo: os indicadores voltam para a linha de conteúdo, e a expansão alimenta o próximo diagnóstico.</p>
+  <div class="legend">
+    <span><i style="background:var(--marca)"></i>Marca: quem somos e o que prometemos</span>
+    <span><i style="background:var(--demanda)"></i>Demanda: como a mensagem circula</span>
+    <span><i style="background:var(--receita)"></i>Receita: como isso vira dinheiro</span>
+  </div>
+  <div class="mapbox">
+    <svg id="map" viewBox="0 90 1000 620" role="img" aria-label="Mapa mental dos 6 marcos: Diagnósticos, Promessa, Atributos, Linha de conteúdo, Indicadores e Expansão"></svg>
+  </div>
+  <p class="hint">Toque em um marco para ir direto ao detalhe dele. Em telas pequenas, role o mapa para os lados.</p>
+</section>
+
+<section id="marcos">
+  <h2>Nível 1 · Cada marco em um olhar</h2>
+  <p class="lead">Uma pergunta, uma entrega. É assim que cada marco será apresentado antes de aprofundar.</p>
+  <div class="grid">
+
+    <article class="card" id="m1">
+      <h3><span class="badge">1</span>Diagnósticos</h3>
+      <p class="q">Onde estamos e onde queremos estar?</p>
+      <dl>
+        <dt>Cinco diagnósticos</dt><dd>Eu (luz e sombra) · Público-alvo · Mercado · Mundo · Integrado</dd>
+        <dt>Entrega</dt><dd>Posição escolhida no quadrante Confiança × Resultados reais</dd>
+        <dt>Base</dt><dd>Roteiros dos PDFs Luz &amp; Sombra e Diagnóstico de Público-alvo</dd>
+      </dl>
+      <span class="soon">aprofundamento: em construção</span>
+    </article>
+
+    <article class="card" id="m2">
+      <h3><span class="badge">2</span>Promessa da marca</h3>
+      <p class="q">Que benefício final o cliente leva ao comprar de nós?</p>
+      <dl>
+        <dt>Entrega</dt><dd>Uma frase de promessa, clara e mensurável</dd>
+        <dt>Entra com</dt><dd>Dor funcional e dor cultural do público (marco 1)</dd>
+      </dl>
+      <span class="soon">aprofundamento: em construção</span>
+    </article>
+
+    <article class="card" id="m3">
+      <h3><span class="badge">3</span>Atributos</h3>
+      <p class="q">Por que somos a melhor opção e capazes de entregar?</p>
+      <dl>
+        <dt>Entrega</dt><dd>Mapa dos atributos do mercado e dos nossos, indo contra o que todo mundo faz (ex.: o mercado fala rápido, nós falamos devagar)</dd>
+        <dt>A validar</dt><dd>Identidade audiovisual e simbologia entram aqui ou viram marco próprio</dd>
+      </dl>
+      <span class="soon">aprofundamento: em construção</span>
+    </article>
+
+    <article class="card demanda" id="m4">
+      <h3><span class="badge">4</span>Linha de conteúdo</h3>
+      <p class="q">Sobre o que falamos, onde e em que formato?</p>
+      <dl>
+        <dt>Entrega</dt><dd>Cada atributo vira uma linha editorial com formato replicável, repetida com frequência até ser entendida e lembrada</dd>
+        <dt>Também define</dt><dd>Canais, com objetivo e posicionamento de cada um</dd>
+      </dl>
+      <span class="soon">aprofundamento: em construção</span>
+    </article>
+
+    <article class="card demanda" id="m5">
+      <h3><span class="badge">5</span>Indicadores</h3>
+      <p class="q">Como sabemos o que funciona?</p>
+      <dl>
+        <dt>Entrega</dt><dd>Painel por canal com meta de output (ex.: MQLs), metas de input (alcance, engajamento, CTR, conversão) e um responsável (DRI)</dd>
+        <dt>Regra</dt><dd>Validou, repete. Não validou, descarta.</dd>
+      </dl>
+      <span class="soon">aprofundamento: em construção</span>
+    </article>
+
+    <article class="card receita" id="m6">
+      <h3><span class="badge">6</span>Expansão</h3>
+      <p class="q">Como servimos o cliente para crescer a receita?</p>
+      <dl>
+        <dt>Entrega</dt><dd>Funil de receita 360º (bowtie): aquisição e jornada do cliente no pós-venda</dd>
+        <dt>Também define</dt><dd>Metas de receita mês a mês, linhas de receita, investimento e taxas de conversão</dd>
+      </dl>
+      <span class="soon">aprofundamento: em construção</span>
+    </article>
+  </div>
+</section>
+
+<section id="visuais">
+  <h2>Dois apoios visuais que o guia vai reutilizar</h2>
+  <div class="twin">
+    <div class="panel">
+      <h3>Quadrante do marco 1</h3>
+      <p class="lead" style="font-size:15px">Com os diagnósticos, a empresa escolhe onde quer se posicionar.</p>
+      <svg viewBox="0 0 440 300" role="img" aria-label="Quadrante de confiança por resultados reais">
+        <line class="q-axis" x1="220" y1="20" x2="220" y2="280"/>
+        <line class="q-axis" x1="20" y1="150" x2="420" y2="150"/>
+        <text class="q-t" x="220" y="14">Confiança alta</text>
+        <text class="q-t" x="220" y="296">Confiança baixa</text>
+        <text class="q-s" x="64" y="170">Resultados</text><text class="q-s" x="64" y="184">reais baixos</text>
+        <text class="q-s" x="376" y="170">Resultados</text><text class="q-s" x="376" y="184">reais altos</text>
+        <rect class="chip-d" x="40" y="50" width="132" height="28" rx="6"/><text class="chip-t" x="106" y="64">Escolas de negócio</text>
+        <rect class="chip-d" x="236" y="104" width="86" height="28" rx="6"/><text class="chip-t" x="279" y="118">Agências</text>
+        <rect class="chip-d" x="76" y="214" width="100" height="28" rx="6"/><text class="chip-t" x="126" y="228">Charlatões</text>
+        <rect class="chip-you" x="296" y="42" width="116" height="30" rx="6"/><text class="chip-t" x="354" y="57">Sua empresa ★</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <h3>Bowtie do marco 6</h3>
+      <p class="lead" style="font-size:15px">Aquisição à esquerda, serviço e expansão à direita, no mesmo funil.</p>
+      <svg viewBox="0 0 440 240" role="img" aria-label="Funil de receita em formato de gravata borboleta">
+        <text class="bt-t" x="110" y="16">MARKETING E VENDAS</text>
+        <text class="bt-t" x="330" y="16">CS</text>
+        <polygon class="bt-l" points="10,40 220,100 220,150 10,210"/>
+        <polygon class="bt-r" points="220,100 430,40 430,210 220,150"/>
+        <line x1="65" y1="40" x2="65" y2="210" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <line x1="120" y1="40" x2="120" y2="210" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <line x1="170" y1="40" x2="170" y2="210" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <line x1="270" y1="40" x2="270" y2="210" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <line x1="325" y1="40" x2="325" y2="210" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <line x1="380" y1="40" x2="380" y2="210" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <text class="bt-t" x="37" y="232">Awareness</text>
+        <text class="bt-t" x="92" y="232">MQL</text>
+        <text class="bt-t" x="145" y="232">SQL</text>
+        <text class="bt-t" x="190" y="232">Cliente</text>
+        <text class="bt-t" x="255" y="232">Onboard.</text>
+        <text class="bt-t" x="297" y="232">Uso</text>
+        <text class="bt-t" x="352" y="232">Impacto</text>
+        <text class="bt-t" x="405" y="232">LTV</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="niveis">
+  <h2>Como o guia se aprofunda</h2>
+  <p class="lead">Cada marco repete a mesma escada, para a empresa nunca se perder.</p>
+  <div class="levels">
+    <div class="level"><h3>Mapa</h3><p>A jornada inteira em uma tela, com os 6 marcos e o ciclo.</p></div>
+    <div class="level"><h3>Visão do marco</h3><p>Uma pergunta, uma entrega e como ele se liga ao anterior e ao próximo.</p></div>
+    <div class="level"><h3>Passo a passo</h3><p>Roteiros e perguntas guiadas, como os dos PDFs de diagnóstico.</p></div>
+    <div class="level"><h3>Modelos e exemplos</h3><p>Templates preenchíveis e exemplos reais para copiar a lógica.</p></div>
+  </div>
+</section>
+
+<footer>Esta é uma proposta de estrutura. Nomes, ordem e profundidade de cada marco ainda podem mudar.</footer>
+</div>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var CX = 500, CY = 380, R = 230, NR = 38, PW = 190, PH = 24, PG = 5;
+  var marcos = [
+    { n: 1, t: 'Diagnósticos', layer: 'marca', a: -120,
+      leaves: ['Eu (luz e sombra)', 'Público-alvo', 'Mercado', 'Mundo', 'Integrado → Quadrante'] },
+    { n: 2, t: 'Promessa', layer: 'marca', a: -60,
+      leaves: ['Benefício final do cliente', 'Frase da promessa'] },
+    { n: 3, t: 'Atributos', layer: 'marca', a: 0,
+      leaves: ['Atributos do mercado', 'Ir contra o mercado', 'Atributos do fundador', 'Identidade (a validar)'] },
+    { n: 4, t: 'Linha de conteúdo', layer: 'demanda', a: 60,
+      leaves: ['Atributo → linha editorial', 'Canais e objetivos', 'Territórios e formatos'] },
+    { n: 5, t: 'Indicadores', layer: 'demanda', a: 120,
+      leaves: ['Metas de input e output', 'Dono (DRI) por canal', 'Validar ou descartar'] },
+    { n: 6, t: 'Expansão', layer: 'receita', a: 180,
+      leaves: ['Bowtie 360º', 'Jornada do cliente (CS)', 'Metas, investimento, LTV'] }
+  ];
+  var svg = document.getElementById('map');
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e);
+    return e;
+  }
+  function rad(d) { return d * Math.PI / 180; }
+
+  var defs = el('defs', {});
+  var mk = el('marker', { id: 'ah', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto' }, defs);
+  el('path', { d: 'M0,0 L10,5 L0,10 z', fill: 'var(--demanda)' }, mk);
+
+  el('circle', { class: 'ring', cx: CX, cy: CY, r: R });
+
+  // chain arrows clockwise at midpoints between nodes (including 6 -> 1)
+  for (var i = 0; i < 6; i++) {
+    var mid = marcos[i].a + 30;
+    var x = CX + R * Math.cos(rad(mid)), y = CY + R * Math.sin(rad(mid));
+    var g = el('g', { transform: 'translate(' + x + ',' + y + ') rotate(' + (mid + 90) + ')' });
+    el('path', { class: 'arrow', d: 'M-8,-6 L8,0 L-8,6 z' }, g);
+  }
+
+  // feedback loop: indicadores (5) -> linha de conteudo (4)
+  el('path', { class: 'loop', d: 'M 412 548 Q 500 470 588 548', 'marker-end': 'url(#ah)' });
+  var lt = el('text', { class: 'loop-label', x: 500, y: 578 });
+  lt.textContent = 'validou, repete';
+  var lt2 = el('text', { class: 'loop-label', x: 500, y: 596, style: 'font-weight:400' });
+  lt2.textContent = 'não validou, descarta';
+
+  // center
+  el('circle', { class: 'center', cx: CX, cy: CY, r: 72 });
+  [['Guia de', -12], ['marca e', 8], ['receita', 28]].forEach(function (p) {
+    var t = el('text', { class: 'center-t', x: CX, y: CY + p[1] }); t.textContent = p[0];
+  });
+
+  marcos.forEach(function (m) {
+    var nx = CX + R * Math.cos(rad(m.a)), ny = CY + R * Math.sin(rad(m.a));
+    var right = Math.cos(rad(m.a)) > -0.01 && m.a !== 180;
+    var link = el('a', { href: '#m' + m.n, class: 'nodelink', 'aria-label': 'Marco ' + m.n + ': ' + m.t });
+    el('circle', { class: 'l-' + m.layer, cx: nx, cy: ny, r: NR }, link);
+    var nt = el('text', { class: 'node-t', x: nx, y: ny }, link); nt.textContent = m.n;
+    var lab = el('text', { class: 'node-l', x: nx, y: ny + NR + 20 }, link); lab.textContent = m.t;
+
+    // leaves stacked beside node
+    var total = m.leaves.length * PH + (m.leaves.length - 1) * PG;
+    var px = right ? nx + NR + 18 : nx - NR - 18 - PW;
+    var py = ny - total / 2;
+    m.leaves.forEach(function (txt, i) {
+      var y = py + i * (PH + PG);
+      el('rect', { class: 'p-' + m.layer, x: px, y: y, width: PW, height: PH, rx: 12 });
+      var t = el('text', { class: 'pill-t', x: px + PW / 2, y: y + PH / 2 + 1 }); t.textContent = txt;
+    });
+  });
+})();
+</script>
+</body>
+</html>
